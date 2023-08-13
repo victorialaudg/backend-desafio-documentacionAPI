@@ -13,14 +13,14 @@ paths:
                 type: array
                 items:
                   $ref: '#components/schemas/Product'
-
         "500":
           description: Error interno del servidor, usualmente generado por una query defectuosa o por un fallo de conexión de la base de datos
+
   /api/products/{pid}:
     get:
       summary: Obtiene un solo producto a partir de su id
       tags:
-        - Product
+        - Products
       parameters:
       - name: pid
         in: path
@@ -35,6 +35,25 @@ paths:
               application/json:
                 schema:
                   $ref: '#components/schemas/Product'
+          "404":
+            description: Producto no encontrado en la base de datos
+    put:
+      summary: Actualiza un producto a través de su id
+      tags:
+        - Products
+      parameters:
+      - name: pid
+        in: path
+        required: true
+        description: id del producto que se desea actualizar
+        schema:
+          $type: String
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/updateProduct'
 components:
   schemas:
     Product:
@@ -67,13 +86,42 @@ components:
         title:
           type: String
           description: Título del producto
-    example:
-      _id: ObjectId('64580cb57ef4b95d8efff162')
-      type: Blend
-      photo: https://www.modobarista.com/product_images/l/093/Catuai__98631_zoom.png
-      category: cafe
-      description: Un café muy especial
-      stock: 197
-      code: 004
-      price: 2270
-      title: Catuai
+      example:
+        _id: ObjectId('64580cb57ef4b95d8efff162')
+        type: Blend
+        photo: https://www.modobarista.com/product_images/l/093/Catuai__98631_zoom.png
+        category: cafe
+        description: Un café muy especial
+        stock: 197
+        code: 004
+        price: 2270
+        title: Catuai
+  requestBodies:
+    updateProduct:
+      type: object
+      properties:
+        title:
+          type: String
+          description: Nombre o título del Producto
+        description:
+          type: String
+          description: Descripción del producto
+        price:
+          type: Number
+          description: Precio del producto
+        code:
+          type: String
+          description: Código del producto
+        stock:
+          type: Number
+          description: Stock del producto
+        category:
+          type: String
+          description: Categoría del producto
+      example:
+        title: Latte
+        description: Tu latte ideal de cada mañana
+        price: 43
+        code: 010
+        stock: 25
+        category: cafe
